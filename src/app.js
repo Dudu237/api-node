@@ -1,6 +1,6 @@
 import express from "express";
 import conectarDataBase from "./config/dbConnect.js";
-import cachorro from "./models/Cachorro.js";
+import routes from "./routes/index.js";
 
 const conexao = await conectarDataBase();
 
@@ -9,11 +9,12 @@ conexao.on("erro", (erro) => {
 });
 
 conexao.once("open", () => {
-  console.log("Conexão feita com sucesso.");
+  console.log("Conexão com DB feita com sucesso.");
 });
 
 const app = express();
-app.use(express.json());
+routes(app);
+// app.use(express.json());
 
 // const cachorros = [
 //   {
