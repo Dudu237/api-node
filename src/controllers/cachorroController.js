@@ -1,4 +1,5 @@
 import cachorro from "../models/Cachorro.js";
+import {tutor} from "../models/Tutor.js"
 
 class CachorroController {
   static async listarCachorros(req, res) {
@@ -7,6 +8,19 @@ class CachorroController {
     res.status(200).json(listaCachorros);
   }
 
+  static async listarCachorroPorRaca(req, res) {
+    const raca = req.query.raca;
+    try {
+      const cachorroPorRaca = await cachorro.find ({ raca: raca });
+      res.status(200).json(cachorroPorRaca);
+    } catch (erro) {
+      res.status(500).json({
+        message: $(erro.message) - "Falha ao pesquisar cachorro por raca",
+      });
+    }
+  }
+
+ 
   static async listarCachorroPorId(req, res) {
     try {
       const id = req.params.id;
@@ -20,11 +34,14 @@ class CachorroController {
   }
 
   static async cadastrarCachorro(req, res) {
+    const novoCachorro = req.body;
     try {
-      const novoCachorro = await cachorro.create(req.body);
+      const tutorEncontrado = await tutor.findById(novoCachorro.tutor);
+      const cachorroCompleto = {...novoCachorro, tutor:{ ...tutorEncontrado._doc}};
+      const cachorroCriado = await cachorro.create(cachorroCompleto);
       res.status(201).json({
         message: "Cachorro inserido com sucesso.",
-        cachorro: novoCachorro,
+        cachorro: cachorroCriado,
       });
     } catch (erro) {
       res.status(500).json({
