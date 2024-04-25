@@ -11,4 +11,8 @@ const tutorSchema = new mongoose.Schema(
 
 const tutor = mongoose.model("tutores", tutorSchema);
 
+<<<<<<< HEAD
 export { tutor, tutorSchema };
+=======
+export { tutor, tutorSchema };
+>>>>>>> 1247fed1fa41c4855a7e15a420ec2118c33795b4
